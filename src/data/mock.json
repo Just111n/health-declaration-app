@@ -1,0 +1,103 @@
+[
+  {
+    "fullName": "Justin Looi Jenn Wei",
+    "object": "International Student",
+    "dateOfBirth": "2023-09-28",
+    "gender": "female",
+    "nationality": "Australia",
+    "nationId": "f3412432rwaf",
+    "travels": [
+      {
+        "departureDate": "2023-09-06",
+        "immigrationDate": "2023-09-29",
+        "departure": "Antarctica",
+        "destination": "Aruba"
+      },
+      {
+        "departureDate": "2023-09-21",
+        "immigrationDate": "2023-09-20",
+        "departure": "American Samoa",
+        "destination": "Bahrain"
+      }
+    ],
+    "province": "Tỉnh Lai Châu",
+    "district": "Huyện Nậm Nhùm",
+    "address": "BLcok 19 BEodk osfdsu ffr",
+    "mobile": "5636466534",
+    "email": "justin@gmail.com",
+    "symptoms": ["Difficulty of breathing"],
+    "vaccines": "",
+    "id": "_3zj7o"
+  },
+  {
+    "fullName": "sihui",
+    "object": "International Student",
+    "dateOfBirth": "2023-08-27",
+    "gender": "female",
+    "nationality": "Australia",
+    "nationId": "4325235235325235",
+    "travels": [
+      {
+        "departureDate": "2023-09-20",
+        "immigrationDate": "2023-09-12",
+        "departure": "Bahamas",
+        "destination": "Azerbaijan"
+      }
+    ],
+    "province": "Tỉnh Cao Bằng",
+    "district": "Huyện Quảng Uyên",
+    "address": "fswnf jsnoswnfjifjw09fj90wfwfw",
+    "mobile": "242342342432",
+    "email": "sihui@gmail.com",
+    "symptoms": ["Fever"],
+    "vaccines": "",
+    "id": "_9fnol"
+  },
+  {
+    "fullName": "Ivorine",
+    "object": "Expert",
+    "dateOfBirth": "2023-09-18",
+    "gender": "female",
+    "nationality": "Aruba",
+    "nationId": "sfsfsfwwefwefef",
+    "travels": [
+      {
+        "departureDate": "2023-08-27",
+        "immigrationDate": "2023-10-06",
+        "departure": "AndorrA",
+        "destination": "Antarctica"
+      },
+      {
+        "departureDate": "2023-07-02",
+        "immigrationDate": "2023-09-21",
+        "departure": "American Samoa",
+        "destination": "Bahamas"
+      }
+    ],
+    "province": "Tỉnh Hà Giang",
+    "district": "Huyện Quản Bạ",
+    "address": "fsfswfwefwfrfqwfq",
+    "mobile": "363443643",
+    "email": "ivorine@gmail.com",
+    "symptoms": ["Sore throat"],
+    "vaccines": "",
+    "id": "_9iefa"
+  },
+  {
+    "fullName": "Justin Looi Jenn Wei",
+    "object": "Vietnamese",
+    "dateOfBirth": "2000-08-15",
+    "gender": "male",
+    "nationality": "Viet Nam",
+    "nationId": "SHIUOhoiG",
+    "travels": [],
+    "province": "Thành phố Hải Phòng",
+    "district": "Quận Hải An",
+    "address": "BLcok 19 BEodk osfdsu ffr",
+    "mobile": "67432432",
+    "email": "justin@gmail.com",
+    "symptoms": ["Difficulty of breathing"],
+    "vaccines": "",
+    "id": "_j10ek"
+  }
+]

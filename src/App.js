@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import TableScreen from "./screens/TableScreen/TableScreen";
+import FormScreen from "./screens/FormScreen/FormScreen"; // Assuming you have this file
+import { Box } from "@mui/material";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Box className="App">
+        <Routes>
+          <Route path="/" element={<Navigate to="/table" replace />} />
+          <Route path="/table" element={<TableScreen />} />
+          <Route path="/form" element={<FormScreen />} />
+          <Route path="/form/:formid" element={<FormScreen />} />{" "}
+          {/* This route handles editing */}
+        </Routes>
+      </Box>
+    </Router>
   );
 }
 
