@@ -10,7 +10,6 @@ const ContactSection = ({ touched, errors, values }) => {
     ) || ""
   );
 
-
   return (
     <Box>
       <Typography variant="h5" gutterBottom className="form-section-header">
@@ -29,22 +28,20 @@ const ContactSection = ({ touched, errors, values }) => {
                 variant="outlined"
                 margin="normal"
                 onChange={(event) => {
-                  // Find the key of the selected province by its name
+                  const selectedProvinceName = event.target.value;
                   const selectedProvinceKey = Object.keys(
                     provincesAndDistricts
                   ).find(
                     (key) =>
-                      provincesAndDistricts[key].name === event.target.value
+                      provincesAndDistricts[key].name === selectedProvinceName
                   );
 
-                  setSelectedProvince(selectedProvinceKey); // Now setting the key instead of the value
-                  form.setFieldValue("province", event.target.value);
+                  setSelectedProvince(selectedProvinceKey);
+                  form.setFieldValue("province", selectedProvinceName);
+                  form.setFieldTouched("province", true); // Mark as touched when changed
                 }}
-                InputProps={{
-                  style: {
-                    textAlign: "left",
-                  },
-                }}
+                error={touched.province && Boolean(errors.province)}
+                helperText={touched.province && errors.province}
               >
                 <MenuItem value="">-----Choose</MenuItem>
                 {Object.keys(provincesAndDistricts).map((provinceKey) => (
@@ -59,6 +56,7 @@ const ContactSection = ({ touched, errors, values }) => {
             )}
           </Field>
         </Grid>
+
         <Grid item xs={6}>
           <Field
             name="district"
@@ -74,6 +72,8 @@ const ContactSection = ({ touched, errors, values }) => {
                 textAlign: "left",
               },
             }}
+            helperText={touched.district && errors.district}
+            error={touched.district && Boolean(errors.district)}
           >
             <MenuItem value="">-----Choose</MenuItem>
             {selectedProvince &&

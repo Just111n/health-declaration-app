@@ -20,10 +20,10 @@ const DeclarationForm = ({ formid }) => {
   const defaultFormData = {
     fullName: "",
     object: "", // I assume it's a string based on your dropdown, adjust as necessary
-    dob: "", // Date of birth - format it in the same format you plan to use in your date picker
+    dateOfBirth: "", // Date of birth - format it in the same format you plan to use in your date picker
     gender: "", // Can be "male", "female", or any other options you provide in your dropdown
     nationality: "", // Should match the country codes in your countries.json
-    idOrPassport: "", // Nation ID or Passport ID
+    nationId: "", // Nation ID or Passport ID
     travels: [], // Assuming this will be an array to store multiple travel details
     province: "",
     district: "",
@@ -61,9 +61,7 @@ const DeclarationForm = ({ formid }) => {
     province: Yup.string().required("Contact province is required"),
     district: Yup.string().required("Contact district is required"),
     address: Yup.string().required("Contact address is required"),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+    email: Yup.string().email("Email is invalid").required("Email is required"),
     mobile: Yup.string().required("Mobile is required"),
     symptoms: Yup.array().of(Yup.string()),
 
@@ -123,6 +121,8 @@ const DeclarationForm = ({ formid }) => {
                     remove={remove}
                     push={push}
                     insert={insert}
+                    touched={touched}
+                    erros={errors}
                   />
                 )}
               </FieldArray>

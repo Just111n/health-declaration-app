@@ -41,3 +41,10 @@
   text-align: left;
   font-weight: 600;
 }
+.MuiButton-root.yellow-button {
+  background-color: #ff9e17;
+}
+
+.MuiButton-root.yellow-button:hover {
+  background-color: #ffc107;
+}
