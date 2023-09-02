@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, TextField, MenuItem, Box, Grid } from "@mui/material";
 import { Field } from "formik";
 import provincesAndDistricts from "../../../data/vietnam-province-district.json";
 
-const ContactSection = ({ touched, errors }) => {
-  const [selectedProvince, setSelectedProvince] = useState("");
+const ContactSection = ({ touched, errors, values }) => {
+  const [selectedProvince, setSelectedProvince] = useState(
+    Object.keys(provincesAndDistricts).find(
+      (key) => provincesAndDistricts[key].name === values.province
+    ) || ""
+  );
+
 
   return (
     <Box>
@@ -24,13 +29,29 @@ const ContactSection = ({ touched, errors }) => {
                 variant="outlined"
                 margin="normal"
                 onChange={(event) => {
-                  setSelectedProvince(event.target.value);
+                  // Find the key of the selected province by its name
+                  const selectedProvinceKey = Object.keys(
+                    provincesAndDistricts
+                  ).find(
+                    (key) =>
+                      provincesAndDistricts[key].name === event.target.value
+                  );
+
+                  setSelectedProvince(selectedProvinceKey); // Now setting the key instead of the value
                   form.setFieldValue("province", event.target.value);
+                }}
+                InputProps={{
+                  style: {
+                    textAlign: "left",
+                  },
                 }}
               >
                 <MenuItem value="">-----Choose</MenuItem>
                 {Object.keys(provincesAndDistricts).map((provinceKey) => (
-                  <MenuItem key={provinceKey} value={provinceKey}>
+                  <MenuItem
+                    key={provinceKey}
+                    value={provincesAndDistricts[provinceKey].name}
+                  >
                     {provincesAndDistricts[provinceKey].name}
                   </MenuItem>
                 ))}
@@ -48,18 +69,24 @@ const ContactSection = ({ touched, errors }) => {
             margin="normal"
             label="Distrct"
             required
+            InputProps={{
+              style: {
+                textAlign: "left",
+              },
+            }}
           >
             <MenuItem value="">-----Choose</MenuItem>
             {selectedProvince &&
               Object.entries(
                 provincesAndDistricts[selectedProvince].cities
               ).map(([cityKey, cityName]) => (
-                <MenuItem key={cityKey} value={cityKey}>
+                <MenuItem key={cityKey} value={cityName}>
                   {cityName}
                 </MenuItem>
               ))}
           </Field>
         </Grid>
+
         <Grid item xs={6}>
           <Field
             required

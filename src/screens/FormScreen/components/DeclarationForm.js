@@ -12,58 +12,27 @@ import { Grid } from "@mui/material";
 import { COVID_FORM_KEY } from "../../../config/constant";
 import { useNavigate } from "react-router-dom";
 import { generateShortID } from "../../../utils/utils";
-import fakeForm from "../../../data/mock2.json";
 
 const DeclarationForm = ({ formid }) => {
   const navigate = useNavigate();
   const existingData = JSON.parse(localStorage.getItem(COVID_FORM_KEY) || "[]");
 
-  // Define a default form structure
   const defaultFormData = {
-    fullName: "Justin Looi Jenn Wei",
-    object: "International Student",
-    dateOfBirth: "2023-09-28",
-    gender: "female",
-    nationality: "Australia",
-    nationId: "f3412432rwaf",
-    travels: [
-      {
-        departureDate: "2023-09-06",
-        immigrationDate: "2023-09-29",
-        departure: "Antarctica",
-        destination: "Aruba",
-      },
-      {
-        departureDate: "2023-09-21",
-        immigrationDate: "2023-09-20",
-        departure: "American Samoa",
-        destination: "Bahrain",
-      },
-    ],
+    fullName: "",
+    object: "", // I assume it's a string based on your dropdown, adjust as necessary
+    dob: "", // Date of birth - format it in the same format you plan to use in your date picker
+    gender: "", // Can be "male", "female", or any other options you provide in your dropdown
+    nationality: "", // Should match the country codes in your countries.json
+    idOrPassport: "", // Nation ID or Passport ID
+    travels: [], // Assuming this will be an array to store multiple travel details
     province: "",
     district: "",
-    address: "BLcok 19 BEodk osfdsu ffr",
-    email: "justin@gmail.com",
-    mobile: "5636466534",
-    symptoms: ["Difficulty of breathing"],
-    vaccines: "Sinopharm",
+    address: "",
+    email: "",
+    mobile: "",
+    symptoms: [], // Array to store symptoms
+    vaccines: "", // Vaccine type, or whatever string value you decide on
   };
-  // const initialValues = {
-  //   fullName: "",
-  //   object: "", // I assume it's a string based on your dropdown, adjust as necessary
-  //   dob: "", // Date of birth - format it in the same format you plan to use in your date picker
-  //   gender: "", // Can be "male", "female", or any other options you provide in your dropdown
-  //   nationality: "", // Should match the country codes in your countries.json
-  //   idOrPassport: "", // Nation ID or Passport ID
-  //   travels: [], // Assuming this will be an array to store multiple travel details
-  //   province: "",
-  //   district: "",
-  //   address: "",
-  //   email: "",
-  //   mobile: "",
-  //   symptoms: [], // Array to store symptoms
-  //   vaccines: "", // Vaccine type, or whatever string value you decide on
-  // };
 
   const initialFormData = formid
     ? existingData.find((item) => item.id === formid)
@@ -71,8 +40,8 @@ const DeclarationForm = ({ formid }) => {
 
   // If initialFormData is undefined, we fall back to the default form structure
 
-  // const initialValues = initialFormData || defaultFormData;
-  const initialValues = defaultFormData;
+  const initialValues = initialFormData || defaultFormData;
+  // const initialValues = defaultFormData;
 
   const validationSchema = Yup.object({
     fullName: Yup.string().required("Name is required"),
@@ -160,7 +129,11 @@ const DeclarationForm = ({ formid }) => {
             </Grid>
 
             <Grid item xs={12}>
-              <ContactSection touched={touched} errors={errors} />
+              <ContactSection
+                touched={touched}
+                errors={errors}
+                values={values}
+              />
             </Grid>
 
             <Grid item xs={12}>
