@@ -8,36 +8,79 @@ import VaccinesSection from "./VaccinesSection";
 import SymptomsSection from "./SymptomsSection";
 import FormActions from "./FormActions";
 import ContactSection from "./ContactSection";
+import { Grid } from "@mui/material";
+import { COVID_FORM_KEY } from "../../../config/constant";
+import { useNavigate } from "react-router-dom";
+import { generateShortID } from "../../../utils/utils";
+import fakeForm from "../../../data/mock2.json";
 
-const DeclarationForm = () => {
-  const initialValues = {
-    fullName: "",
-    object: "", // I assume it's a string based on your dropdown, adjust as necessary
-    dob: "", // Date of birth - format it in the same format you plan to use in your date picker
-    gender: "", // Can be "male", "female", or any other options you provide in your dropdown
-    nationality: "", // Should match the country codes in your countries.json
-    idOrPassport: "", // Nation ID or Passport ID
-    travels: [], // Assuming this will be an array to store multiple travel details
+const DeclarationForm = ({ formid }) => {
+  const navigate = useNavigate();
+  const existingData = JSON.parse(localStorage.getItem(COVID_FORM_KEY) || "[]");
+
+  // Define a default form structure
+  const defaultFormData = {
+    fullName: "Justin Looi Jenn Wei",
+    object: "International Student",
+    dateOfBirth: "2023-09-28",
+    gender: "female",
+    nationality: "Australia",
+    nationId: "f3412432rwaf",
+    travels: [
+      {
+        departureDate: "2023-09-06",
+        immigrationDate: "2023-09-29",
+        departure: "Antarctica",
+        destination: "Aruba",
+      },
+      {
+        departureDate: "2023-09-21",
+        immigrationDate: "2023-09-20",
+        departure: "American Samoa",
+        destination: "Bahrain",
+      },
+    ],
     province: "",
     district: "",
-    address: "",
-    email: "",
-    mobile: "",
-    symptoms: [], // Array to store symptoms
-    vaccine: "", // Vaccine type, or whatever string value you decide on
+    address: "BLcok 19 BEodk osfdsu ffr",
+    email: "justin@gmail.com",
+    mobile: "5636466534",
+    symptoms: ["Difficulty of breathing"],
+    vaccines: "Sinopharm",
   };
+  // const initialValues = {
+  //   fullName: "",
+  //   object: "", // I assume it's a string based on your dropdown, adjust as necessary
+  //   dob: "", // Date of birth - format it in the same format you plan to use in your date picker
+  //   gender: "", // Can be "male", "female", or any other options you provide in your dropdown
+  //   nationality: "", // Should match the country codes in your countries.json
+  //   idOrPassport: "", // Nation ID or Passport ID
+  //   travels: [], // Assuming this will be an array to store multiple travel details
+  //   province: "",
+  //   district: "",
+  //   address: "",
+  //   email: "",
+  //   mobile: "",
+  //   symptoms: [], // Array to store symptoms
+  //   vaccines: "", // Vaccine type, or whatever string value you decide on
+  // };
+
+  const initialFormData = formid
+    ? existingData.find((item) => item.id === formid)
+    : defaultFormData;
+
+  // If initialFormData is undefined, we fall back to the default form structure
+
+  // const initialValues = initialFormData || defaultFormData;
+  const initialValues = defaultFormData;
 
   const validationSchema = Yup.object({
-    fullName: Yup.string().required("Required"),
-    age: Yup.string().required("Age is required"),
-    symptoms: Yup.object().shape({
-      fever: Yup.boolean(),
-      soreThroat: Yup.boolean(),
-      difficultyOfBreathing: Yup.boolean(),
-      fiber: Yup.boolean(),
-    }),
-    vaccine: Yup.string().required("Please select a vaccine"),
-    // ... Add validation for other fields ...
+    fullName: Yup.string().required("Name is required"),
+    object: Yup.string().required("Object is required"),
+    dateOfBirth: Yup.string().required("Date of birth is required"), // Assuming you're using a string for the date of birth. If you're using a Date object, change this.
+    gender: Yup.string().required("Gender is required"),
+    nationality: Yup.string().required("Nationality is required"),
+    nationId: Yup.string().required("Nation ID is required"), // Addressing the mismatch
     travels: Yup.array().of(
       Yup.object({
         departureDate: Yup.string().required("Required"),
@@ -52,43 +95,86 @@ const DeclarationForm = () => {
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    mobile: Yup.string()
-      // .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, "Mobile number is not valid")
-      .required("Mobile is required"),
+    mobile: Yup.string().required("Mobile is required"),
+    symptoms: Yup.array().of(Yup.string()),
+
+    vaccines: Yup.string(),
   });
+  const handleSubmit = (values) => {
+    // Retrieve existing data or initialize as an empty array
+    const existingData = JSON.parse(
+      localStorage.getItem(COVID_FORM_KEY) || "[]"
+    );
+
+    if (formid) {
+      // If formid exists, update the corresponding entry
+      const index = existingData.findIndex((item) => item.id === formid);
+      if (index !== -1) {
+        existingData[index] = values; // Update the item
+      }
+    } else {
+      // If formid doesn't exist, generate a unique one and add the new entry
+      values.id = generateShortID();
+      // (Optional) You could add a loop here to generate a new ID while it's already in use.
+      while (existingData.some((item) => item.id === values.id)) {
+        values.id = generateShortID();
+      }
+      existingData.push(values);
+    }
+
+    // Store the updated data back to localStorage
+    localStorage.setItem(COVID_FORM_KEY, JSON.stringify(existingData));
+
+    // Navigate to /table
+    navigate("/table");
+  };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values);
+        handleSubmit(values);
       }}
     >
       {({ values, errors, touched, handleChange }) => (
         <Form>
-          <PersonalInfoSection touched={touched} errors={errors} />
+          <Grid container spacing={3}>
+            {/* spacing prop is to give space between each Grid item. You can adjust the value as per your requirements. */}
 
-          <FieldArray name="travels">
-            {({ insert, remove, push }) => (
-              <TravelsSection
-                values={values}
-                remove={remove}
-                push={push}
-                insert={insert}
-              />
-            )}
-          </FieldArray>
-          <ContactSection
-            touched={touched}
-            errors={errors}
-            handleChange={handleChange}
-          />
+            <Grid item xs={12}>
+              <PersonalInfoSection touched={touched} errors={errors} />
+            </Grid>
 
-          <SymptomsSection values={values} handleChange={handleChange} />
-          <VaccinesSection values={values} handleChange={handleChange} />
+            <Grid item xs={12}>
+              <FieldArray name="travels">
+                {({ insert, remove, push }) => (
+                  <TravelsSection
+                    values={values}
+                    remove={remove}
+                    push={push}
+                    insert={insert}
+                  />
+                )}
+              </FieldArray>
+            </Grid>
 
-          <FormActions />
+            <Grid item xs={12}>
+              <ContactSection touched={touched} errors={errors} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <SymptomsSection touched={touched} errors={errors} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <VaccinesSection touched={touched} errors={errors} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormActions />
+            </Grid>
+          </Grid>
         </Form>
       )}
     </Formik>
@@ -96,4 +182,3 @@ const DeclarationForm = () => {
 };
 
 export default DeclarationForm;
-// export { MySelect };

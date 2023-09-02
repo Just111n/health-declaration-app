@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import TableScreen from "./screens/TableScreen/TableScreen";
-import FormScreen from "./screens/FormScreen/FormScreen"; // Assuming you have this file
+import FormScreen from "./screens/FormScreen/FormScreen";
 import { Box } from "@mui/material";
 
 function App() {
@@ -18,8 +18,7 @@ function App() {
           <Route path="/" element={<Navigate to="/table" replace />} />
           <Route path="/table" element={<TableScreen />} />
           <Route path="/form" element={<FormScreen />} />
-          <Route path="/form/:formid" element={<FormScreen />} />{" "}
-          {/* This route handles editing */}
+          <Route path="/form/:formid" element={<FormScreen />} />
         </Routes>
       </Box>
     </Router>

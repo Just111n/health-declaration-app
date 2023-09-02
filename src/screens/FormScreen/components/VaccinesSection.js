@@ -4,45 +4,89 @@ import {
   FormControl,
   FormControlLabel,
   Radio,
-  RadioGroup,
   Box,
+  FormHelperText,
 } from "@mui/material";
+import { Field } from "formik";
 
-const VaccinesSection = ({ values, handleChange }) => (
-  <Box>
-    <Typography variant="h6" gutterBottom sx={{ textAlign: "left" }}>
+const VaccinesSection = ({ touched, errors }) => (
+  <Box width="lg">
+    <Typography variant="h6" gutterBottom className="form-section-header">
       Vaccines:
     </Typography>
     <Box display="flex" flexDirection="row" alignItems="center">
-      <Typography variant="subtitle1" sx={{paddingRight:5}}>
-        Which one would you like to vaccinate?: 
+      <Typography variant="subtitle1" sx={{ paddingRight: 5 }}>
+        Which one would you like to vaccinate?:
       </Typography>
-      <FormControl component="fieldset">
-        <RadioGroup
-          aria-label="vaccine"
-          name="vaccine"
-          value={values.vaccine}
-          onChange={handleChange}
-          row
-        >
-          <FormControlLabel value="None" control={<Radio />} label="None" />
-          <FormControlLabel
-            value="AstraZeneca"
-            control={<Radio />}
-            label="AstraZeneca"
-          />
-          <FormControlLabel value="Pfizer" control={<Radio />} label="Pfizer" />
-          <FormControlLabel
-            value="Moderna"
-            control={<Radio />}
-            label="Moderna"
-          />
-          <FormControlLabel
-            value="Sinopharm"
-            control={<Radio />}
-            label="Sinopharm"
-          />
-        </RadioGroup>
+      <FormControl
+        component="fieldset"
+        error={touched.vaccine && Boolean(errors.vaccine)}
+      >
+        <Field name="vaccines">
+          {({ field }) => (
+            <Box width="lg">
+              <FormControlLabel
+                value=""
+                control={
+                  <Radio
+                    checked={field.value === ""}
+                    onChange={field.onChange}
+                    name={field.name}
+                  />
+                }
+                label="None"
+              />
+              <FormControlLabel
+                value="AstraZeneca"
+                control={
+                  <Radio
+                    checked={field.value === "AstraZeneca"}
+                    onChange={field.onChange}
+                    name={field.name}
+                  />
+                }
+                label="AstraZeneca"
+              />
+              <FormControlLabel
+                value="Pfizer"
+                control={
+                  <Radio
+                    checked={field.value === "Pfizer"}
+                    onChange={field.onChange}
+                    name={field.name}
+                  />
+                }
+                label="Pfizer"
+              />
+              <FormControlLabel
+                value="Moderna"
+                control={
+                  <Radio
+                    checked={field.value === "Moderna"}
+                    onChange={field.onChange}
+                    name={field.name}
+                  />
+                }
+                label="Moderna"
+              />
+              <FormControlLabel
+                value="Sinopharm"
+                control={
+                  <Radio
+                    checked={field.value === "Sinopharm"}
+                    onChange={field.onChange}
+                    name={field.name}
+                  />
+                }
+                label="Sinopharm"
+              />
+            </Box>
+          )}
+        </Field>
+        {/* Displaying Formik error messages */}
+        {touched.vaccine && errors.vaccine ? (
+          <FormHelperText>{errors.vaccine}</FormHelperText>
+        ) : null}
       </FormControl>
     </Box>
   </Box>

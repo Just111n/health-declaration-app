@@ -1,9 +1,9 @@
 import { Typography, Box, TextField, Button } from "@mui/material";
-import { Formik, Form, Field, FieldArray, useField } from "formik";
+import { Field } from "formik";
 
 const TravelsSection = ({ values, remove, push, insert }) => (
   <Box>
-    <Typography variant="h6" gutterBottom sx={{ textAlign: "left" }}>
+    <Typography variant="h6" gutterBottom className="form-section-header">
       Travel:
     </Typography>
     {values.travels.length > 0 ? (
@@ -70,7 +70,7 @@ const TravelsSection = ({ values, remove, push, insert }) => (
       ))
     ) : (
       <Box display="flex" flexDirection="row" alignItems="center">
-        <Typography variant="subtitle1" sx={{ paddingRight: 5 }}>
+        <Typography variant="subtitle1" sx={{ paddingRight: 5 }} className="form-section-header">
           Do you travel in the last 14 days?
         </Typography>
         <Button

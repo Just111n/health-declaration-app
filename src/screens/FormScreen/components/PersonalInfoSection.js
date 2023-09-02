@@ -6,7 +6,7 @@ import countries from "../../../data/countries.json";
 const PersonalInfoSection = ({ touched, errors }) => {
   return (
     <Box>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "left" }}>
+      <Typography variant="h5" gutterBottom className="form-section-header">
         Personal information:
       </Typography>
 
@@ -35,6 +35,8 @@ const PersonalInfoSection = ({ touched, errors }) => {
             fullWidth
             variant="outlined"
             margin="normal"
+            helperText={touched.object && errors.object}
+            error={touched.object && Boolean(errors.object)}
             InputProps={{
               style: {
                 textAlign: "left",
@@ -54,7 +56,7 @@ const PersonalInfoSection = ({ touched, errors }) => {
         <Grid item xs={3}>
           <Field
             required
-            name="dob"
+            name="dateOfBirth"
             as={TextField}
             label="Date of birth"
             fullWidth
@@ -62,8 +64,8 @@ const PersonalInfoSection = ({ touched, errors }) => {
             margin="normal"
             type="date"
             InputLabelProps={{ shrink: true }}
-            helperText={touched.dob && errors.dob}
-            error={touched.dob && Boolean(errors.dob)}
+            helperText={touched.dateOfBirth && errors.dateOfBirth}
+            error={touched.dateOfBirth && Boolean(errors.dateOfBirth)}
           />
         </Grid>
 
@@ -82,6 +84,8 @@ const PersonalInfoSection = ({ touched, errors }) => {
                 textAlign: "left",
               },
             }}
+            helperText={touched.gender && errors.gender}
+            error={touched.gender && Boolean(errors.gender)}
           >
             <MenuItem value="">-----Choose</MenuItem>
             <MenuItem value="male">Male</MenuItem>
@@ -104,10 +108,12 @@ const PersonalInfoSection = ({ touched, errors }) => {
                 textAlign: "left",
               },
             }}
+            helperText={touched.nationality && errors.nationality}
+            error={touched.nationality && Boolean(errors.nationality)}
           >
             <MenuItem value="">-----Choose</MenuItem>
             {countries.map((country) => (
-              <MenuItem key={country.code} value={country.code}>
+              <MenuItem key={country.code} value={country.name}>
                 {country.name}
               </MenuItem>
             ))}
@@ -117,14 +123,14 @@ const PersonalInfoSection = ({ touched, errors }) => {
         <Grid item xs={6}>
           <Field
             required
-            name="idOrPassport"
+            name="nationId"
             as={TextField}
             label="Nation ID or Passport ID"
             fullWidth
             variant="outlined"
             margin="normal"
-            helperText={touched.idOrPassport && errors.idOrPassport}
-            error={touched.idOrPassport && Boolean(errors.idOrPassport)}
+            helperText={touched.nationId && errors.nationId}
+            error={touched.nationId && Boolean(errors.nationId)}
           />
         </Grid>
       </Grid>

@@ -3,53 +3,51 @@ import { Typography, TextField, MenuItem, Box, Grid } from "@mui/material";
 import { Field } from "formik";
 import provincesAndDistricts from "../../../data/vietnam-province-district.json";
 
-const ContactSection = ({ touched, errors, handleChange }) => {
+const ContactSection = ({ touched, errors }) => {
   const [selectedProvince, setSelectedProvince] = useState("");
-
-  const handleProvinceChange = (event) => {
-    setSelectedProvince(event.target.value);
-  };
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5" gutterBottom className="form-section-header">
         Contact:
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={6}>
-          <Field
-            required
-            name="province"
-            label="Province"
-            as={TextField}
-            select
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            onChange={(event) => {
-              handleProvinceChange(event);
-              handleChange(event); // Assuming Formik's handleChange is passed as a prop
-            }}
-          >
-            <MenuItem value="">-----Choose</MenuItem>
-            {Object.keys(provincesAndDistricts).map((provinceKey) => (
-              <MenuItem key={provinceKey} value={provinceKey}>
-                {provincesAndDistricts[provinceKey].name}
-              </MenuItem>
-            ))}
+          <Field name="province">
+            {({ field, form }) => (
+              <TextField
+                {...field}
+                required
+                label="Province"
+                select
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                onChange={(event) => {
+                  setSelectedProvince(event.target.value);
+                  form.setFieldValue("province", event.target.value);
+                }}
+              >
+                <MenuItem value="">-----Choose</MenuItem>
+                {Object.keys(provincesAndDistricts).map((provinceKey) => (
+                  <MenuItem key={provinceKey} value={provinceKey}>
+                    {provincesAndDistricts[provinceKey].name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
           </Field>
         </Grid>
         <Grid item xs={6}>
           <Field
-            required
             name="district"
-            label="District"
             as={TextField}
             select
             fullWidth
             variant="outlined"
             margin="normal"
-            onChange={handleChange}
+            label="Distrct"
+            required
           >
             <MenuItem value="">-----Choose</MenuItem>
             {selectedProvince &&

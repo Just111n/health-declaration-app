@@ -18,7 +18,6 @@ export default function TableScreen() {
             fontSize: "2.5rem",
             marginBottom: "16px",
             fontWeight: 500,
-            // ... other styles
           }}
         >
           Vietnam Health Declaration for foreign entry
