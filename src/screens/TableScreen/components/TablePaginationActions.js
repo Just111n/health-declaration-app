@@ -19,7 +19,7 @@ function TablePaginationActions({ count, page, rowsPerPage, onPageChange }) {
   };
 
   const totalPages = Math.ceil(count / rowsPerPage);
-  const pageNumbers = [...Array(totalPages).keys()]; // This gives [0,1,2,..., totalPages-1]
+  const pageNumbers = [...Array(totalPages).keys()];
 
   return (
     <div
@@ -27,7 +27,6 @@ function TablePaginationActions({ count, page, rowsPerPage, onPageChange }) {
         flexShrink: 0,
         marginLeft: "2.5rem",
         display: "flex",
-        alignItems: "center",
       }}
     >
       <Button
@@ -45,10 +44,6 @@ function TablePaginationActions({ count, page, rowsPerPage, onPageChange }) {
             key={pageNumber}
             onClick={(e) => handlePageNumberClick(e, pageNumber)}
             variant={pageNumber === page ? "contained" : "outlined"}
-            //   style={{
-            //     cursor: "pointer",
-            //     color: pageNumber === page ? "blue" : "black",
-            //   }}
           >
             {pageNumber + 1}
           </Button>

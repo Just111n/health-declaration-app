@@ -9,7 +9,7 @@ export default function TableScreen() {
   const navigate = useNavigate();
 
   return (
-    <Container display="flex" justifyContent="center" alignItems="center">
+    <Container display="flex">
       <Box maxWidth="lg" paddingTop={6}>
         <Typography
           variant="h1"

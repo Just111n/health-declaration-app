@@ -11,7 +11,6 @@ import {
   Box,
 } from "@mui/material";
 import { COVID_FORM_KEY } from "../../../config/constant";
-import mock from "../../../data/mock.json";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import { useNavigate } from "react-router-dom";
@@ -19,9 +18,12 @@ import { alpha } from "@mui/material/styles";
 import TablePaginationActions from "./TablePaginationActions";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
+import Typography from "@mui/material/Typography";
 
 export default function DataTable({ searchTerm }) {
-  const [data, setData] = useState(mock);
+  const dataArr = JSON.parse(localStorage.getItem(COVID_FORM_KEY));
+
+  const [data, setData] = useState(dataArr || []);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(2);
   const navigate = useNavigate();
@@ -58,12 +60,14 @@ export default function DataTable({ searchTerm }) {
 
   const handleEdit = (id) => {
     navigate(`/form/${id}`);
+    const point = data.find((item) => item.id === id);
+    console.log(point);
   };
 
   const handleDelete = (id) => {
-    const updatedData = data.filter((item) => item.id !== id);
-    setData(updatedData);
+    setData((prevState) => prevState.filter((item) => item.id !== id));
   };
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#D1E7DD",
@@ -130,8 +134,8 @@ export default function DataTable({ searchTerm }) {
     if (dataToDisplay.length === 0) {
       return (
         <TableRow>
-          <TableCell colSpan={8} style={{ textAlign: "center" }}>
-            No declarations
+          <TableCell colSpan={12} style={{ textAlign: "center" }}>
+            <Typography variant="h6">No Declarations</Typography>
           </TableCell>
         </TableRow>
       );
@@ -143,12 +147,13 @@ export default function DataTable({ searchTerm }) {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         rowIndex={page * rowsPerPage + index}
+        key={index.toString()}
       />
     ));
   }
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box display="flex">
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
