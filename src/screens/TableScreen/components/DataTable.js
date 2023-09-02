@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   TablePagination,
   Box,
 } from "@mui/material";
@@ -16,14 +15,17 @@ import mock from "../../../data/mock.json";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import { useNavigate } from "react-router-dom";
+import { alpha } from "@mui/material/styles";
+import TablePaginationActions from "./TablePaginationActions";
+import { styled } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
 
-export default function DataTable() {
+export default function DataTable({ searchTerm }) {
   const [data, setData] = useState(mock);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(2);
   const navigate = useNavigate();
 
-  // Fetch data from local storage when the component mounts
   useEffect(() => {
     const storedData = localStorage.getItem(COVID_FORM_KEY);
     if (storedData) {
@@ -32,9 +34,18 @@ export default function DataTable() {
   }, []);
 
   useEffect(() => {
-    // Update local storage whenever the data changes
     localStorage.setItem(COVID_FORM_KEY, JSON.stringify(data));
   }, [data]);
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.object.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.id.toString().includes(searchTerm) ||
+      row.gender.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.province.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -53,89 +64,125 @@ export default function DataTable() {
     const updatedData = data.filter((item) => item.id !== id);
     setData(updatedData);
   };
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#D1E7DD",
+      fontWeight: 800,
+    },
+    [`&.${tableCellClasses.body}`]: {},
+  }));
+  const DataRow = ({ row, handleEdit, handleDelete, rowIndex }) => (
+    <TableRow
+      key={row.id}
+      sx={{
+        "&:hover": {
+          backgroundColor: alpha("#212529", 0.1),
+          cursor: "pointer",
+        },
+      }}
+    >
+      <TableCell>{rowIndex + 1}</TableCell>
+      <TableCell>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px", // for spacing between elements
+          }}
+        >
+          <div onClick={() => handleEdit(row.id)} style={{ cursor: "pointer" }}>
+            <ModeEditOutlineOutlinedIcon color="primary" />
+          </div>
+
+          <div
+            onClick={() => handleDelete(row.id)}
+            style={{ cursor: "pointer" }}
+          >
+            <DeleteOutlinedIcon color="error" />
+          </div>
+
+          <span>{row.id}</span>
+        </div>
+      </TableCell>
+      <TableCell>{row.fullName}</TableCell>
+      <TableCell>{row.object}</TableCell>
+      <TableCell>{new Date(row.dateOfBirth).toLocaleDateString()}</TableCell>
+      <TableCell>{row.gender}</TableCell>
+      <TableCell>{row.province}</TableCell>
+    </TableRow>
+  );
+
+  function renderTableBody(
+    filteredData,
+    page,
+    rowsPerPage,
+    handleEdit,
+    handleDelete
+  ) {
+    const dataToDisplay =
+      rowsPerPage > 0
+        ? filteredData.slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage
+          )
+        : filteredData;
+
+    if (dataToDisplay.length === 0) {
+      return (
+        <TableRow>
+          <TableCell colSpan={8} style={{ textAlign: "center" }}>
+            No declarations
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    return dataToDisplay.map((row, index) => (
+      <DataRow
+        row={row}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        rowIndex={page * rowsPerPage + index}
+      />
+    ));
+  }
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
-      <TableContainer component={Paper} style={{ width: "80%" }}>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
-
-              <TableCell>Form ID</TableCell>
-              <TableCell>Full Name</TableCell>
-              <TableCell>Object</TableCell>
-              <TableCell>Date Of Birth</TableCell>
-              <TableCell>Gender</TableCell>
-              <TableCell>Contact Province</TableCell>
+              <StyledTableCell>#</StyledTableCell>
+              <StyledTableCell>Form ID</StyledTableCell>
+              <StyledTableCell>Full Name</StyledTableCell>
+              <StyledTableCell>Object</StyledTableCell>
+              <StyledTableCell>Date Of Birth</StyledTableCell>
+              <StyledTableCell>Gender</StyledTableCell>
+              <StyledTableCell>Contact Province</StyledTableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {(rowsPerPage > 0
-              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : data
-            ).length > 0 ? (
-              (rowsPerPage > 0
-                ? data.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : data
-              ).map((row, index) => (
-                <TableRow key={row.id}>
-                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-                  <TableCell>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px", // for spacing between elements
-                      }}
-                    >
-                      <div
-                        onClick={() => handleEdit(row.id)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <ModeEditOutlineOutlinedIcon />
-                      </div>
-
-                      <div
-                        onClick={() => handleDelete(row.id)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <DeleteOutlinedIcon />
-                      </div>
-
-                      <span>{row.id}</span>
-                    </div>
-                  </TableCell>
-
-                  <TableCell>{row.fullName}</TableCell>
-                  <TableCell>{row.object}</TableCell>
-                  <TableCell>
-                    {new Date(row.dateOfBirth).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>{row.gender}</TableCell>
-                  <TableCell>{row.province}</TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8} style={{ textAlign: "center" }}>
-                  No declarations
-                </TableCell>
-              </TableRow>
+            {renderTableBody(
+              filteredData,
+              page,
+              rowsPerPage,
+              handleEdit,
+              handleDelete
             )}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[2, 4, 6]}
           component="div"
-          count={data.length}
+          count={filteredData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Items/Page"
+          ActionsComponent={TablePaginationActions} // This line uses the custom actions
         />
       </TableContainer>
     </Box>
