@@ -48,3 +48,10 @@
 .MuiButton-root.yellow-button:hover {
   background-color: #ffc107;
 }
+
+.MuiButton-root.reset-button {
+  background-color: #6c757d;
+}
+.MuiButton-root.reset-button:hover {
+  background-color: #5C636A;
+}

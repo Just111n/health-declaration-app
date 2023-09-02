@@ -85,7 +85,7 @@ export default function DataTable({ searchTerm }) {
         },
       }}
     >
-      <TableCell>{rowIndex + 1}</TableCell>
+      <TableCell>{(rowIndex % rowsPerPage)+1}</TableCell>
       <TableCell>
         <div
           style={{

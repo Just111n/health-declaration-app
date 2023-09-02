@@ -9,33 +9,23 @@ import {
 import { Field } from "formik";
 import countryData from "../../../data/countries.json";
 
-const TravelsSection = ({ values, errors, touched, remove, push, insert }) => {
-  const hasTravels = values?.travels?.length > 0;
+const TravelsSection = ({
+  values: { travels = [] },
+  errors,
+  touched,
+  remove,
+  push,
+  insert,
+}) => {
+  const hasTravels = travels.length > 0;
 
-  const CountryDropdown = ({ name, value }) => (
-    <Field
-      name={name}
-      value={value || ""}
-      as={TextField}
-      select
-      label="Departure"
-      fullWidth
-      variant="outlined"
-      InputProps={{
-        style: {
-          textAlign: "left",
-        },
-      }}
-      required
-    >
-      <MenuItem value="">-----Choose</MenuItem>
-      {countryData.map((country) => (
-        <MenuItem key={country.code} value={country.name}>
-          {country.name}
-        </MenuItem>
-      ))}
-    </Field>
-  );
+  const getError = (index, fieldName) =>
+    touched.travels?.[index]?.[fieldName] &&
+    Boolean(errors.travels?.[index]?.[fieldName]);
+
+  const getHelperText = (index, fieldName) =>
+    touched.travels?.[index]?.[fieldName] &&
+    errors.travels?.[index]?.[fieldName];
 
   return (
     <Box>
@@ -43,7 +33,7 @@ const TravelsSection = ({ values, errors, touched, remove, push, insert }) => {
         Travel:
       </Typography>
       {hasTravels ? (
-        values.travels.map((travel, index) => (
+        travels.map((travel, index) => (
           <Box key={index} marginBottom={3}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -58,8 +48,8 @@ const TravelsSection = ({ values, errors, touched, remove, push, insert }) => {
                   margin="normal"
                   InputLabelProps={{ shrink: true }}
                   required
-                  // helperText={touched.fullName && errors.fullName}
-                  // error={touched.fullName && Boolean(errors.fullName)}
+                  error={getError(index, "departureDate")}
+                  helperText={getHelperText(index, "departureDate")}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -74,19 +64,57 @@ const TravelsSection = ({ values, errors, touched, remove, push, insert }) => {
                   margin="normal"
                   InputLabelProps={{ shrink: true }}
                   required
+                  error={getError(index, "immigrationDate")}
+                  helperText={getHelperText(index, "immigrationDate")}
                 />
               </Grid>
               <Grid item xs={6}>
-                <CountryDropdown
+                <Field
                   name={`travels.${index}.departure`}
-                  value={travel?.departure}
-                />
+                  value={travel?.departure || ""}
+                  as={TextField}
+                  select
+                  label="Departure"
+                  fullWidth
+                  variant="outlined"
+                  InputProps={{
+                    style: { textAlign: "left" },
+                  }}
+                  required
+                  error={getError(index, "departure")}
+                  helperText={getHelperText(index, "departure")}
+                >
+                  <MenuItem value="">-----Choose</MenuItem>
+                  {countryData.map((country) => (
+                    <MenuItem key={country.code} value={country.name}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </Field>
               </Grid>
               <Grid item xs={6}>
-                <CountryDropdown
+                <Field
                   name={`travels.${index}.destination`}
-                  value={travel?.destination}
-                />
+                  value={travel?.destination || ""}
+                  as={TextField}
+                  select
+                  label="Destination"
+                  fullWidth
+                  variant="outlined"
+                  InputProps={{
+                    style: { textAlign: "left" },
+                  }}
+                  required
+                  error={getError(index, "destination")}
+                  helperText={getHelperText(index, "destination")}
+                >
+                  <MenuItem value="">-----Choose</MenuItem>
+                  {countryData.map((country) => (
+                    <MenuItem key={country.code} value={country.name}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </Field>
               </Grid>
             </Grid>
             <Box

@@ -42,6 +42,11 @@ const ContactSection = ({ touched, errors, values }) => {
                 }}
                 error={touched.province && Boolean(errors.province)}
                 helperText={touched.province && errors.province}
+                InputProps={{
+                  style: {
+                    textAlign: "left",
+                  },
+                }}
               >
                 <MenuItem value="">-----Choose</MenuItem>
                 {Object.keys(provincesAndDistricts).map((provinceKey) => (

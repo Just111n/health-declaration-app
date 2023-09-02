@@ -122,7 +122,7 @@ const DeclarationForm = ({ formid }) => {
                     push={push}
                     insert={insert}
                     touched={touched}
-                    erros={errors}
+                    errors={errors}
                   />
                 )}
               </FieldArray>
